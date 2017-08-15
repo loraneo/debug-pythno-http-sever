@@ -1,1 +1,5 @@
-# debug-pythno-http-sever
+# debug-pytono-http-sever
+
+USAGE:
+
+''' python server.py <port> '''

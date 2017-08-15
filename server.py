@@ -2,6 +2,7 @@
 # Reflects the requests from HTTP methods GET, POST, PUT, and DELETE
 # Written by Nathan Hamiel (2010)
 
+import sys
 from BaseHTTPServer import HTTPServer, BaseHTTPRequestHandler
 from optparse import OptionParser
 
@@ -23,6 +24,10 @@ class RequestHandler(BaseHTTPRequestHandler):
         self.wfile.write("<html><head><title>Title goes here.</title></head>")
         self.wfile.write("<body><p>Hi Michael!</p>")
         self.wfile.write("<p>You accessed path: %s</p>" % self.path)
+        self.wfile.write("<pre>")
+        self.wfile.write("%s" % self.headers)
+        self.wfile.write("</pre>")
+        
         self.wfile.write("</body></html>")
 
     def do_POST(self):
@@ -45,14 +50,20 @@ class RequestHandler(BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write("<html><head><title>Title goes here.</title></head>")
         self.wfile.write("<body><p>Hi Michael!</p>")
-        self.wfile.write("<p>You accessed path: %s</p>" % s.path)
-        self.wfile.write("</body></html>")
+        self.wfile.write("<p>You accessed path: %s</p>" % self.path)
+        self.wfile.write("<pre>")
+        self.wfile.write("%s" % self.headers)
+        self.wfile.write("</pre>")
 
     do_PUT = do_POST
     do_DELETE = do_GET
+    do_HEAD = do_GET
 
 def main():
-    port = 8006
+    port = 8080
+    if len(sys.argv) > 1:
+        port = int(sys.argv[1])
+    
     print('Listening on localhost:%s' % port)
     server = HTTPServer(('', port), RequestHandler)
     server.serve_forever()
